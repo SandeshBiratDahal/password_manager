@@ -204,6 +204,39 @@ int main(int argc, char* argv[]) {
                 i++;
             }
         }
+        else if (args[0] == "--rewrite") {
+            char ch;
+
+            cout << "!!WARNING!!\n!!WARNING!!\n!!WARNING!!" << endl << "Pressing 'Y' means all passwords will be rewritten and old passwords can not be recovered!!" << endl;
+            cout << "Do you want to rewrite all passwords? [Y/N]: ";
+            cin >> ch;
+            int i = 0;
+            if (ch == 'y' || ch == 'Y') {
+                fstream fin, fout;
+                fin.open(get_file_path(), ios::in);
+                fout.open(get_temp_path(), ios::out);
+
+                while (getline(fin, arg)) {
+                    if (i % 2 == 1) {
+                        fout << generate_password_secure() << endl;
+                    }
+                    else {
+                        fout << arg << endl;
+                    }
+                    i++;
+                }
+                fin.close();
+                fout.close();
+
+                remove(get_file_path().c_str());
+                rename(get_temp_path().c_str(), get_file_path().c_str());
+                cout << "Rewritten all passwords!!" << endl;
+            }
+            else {
+                cout << "Passwords not rewritten!!" << endl;
+            }
+
+        }
     }
 
     else {
